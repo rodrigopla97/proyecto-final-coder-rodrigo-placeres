@@ -18,7 +18,15 @@ function recargoTarjeta(num, cant) {
 let descuentoEfectivo = (num) => num - num * 0.1;
 
 function filterArray(value) {
-    return filtroCarrito.push(value.nombre);
+    return filtroCarrito.push(`${value.nombre} ${value.tipo}`);
+}
+
+class Producto {
+    constructor(nombre, tipo, precio) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+        this.precio = precio;
+    }
 }
 
 let totalCompra = 0;
@@ -35,14 +43,6 @@ let decision;
 let tipoPago;
 let precioFinal = 0;
 let cuotas;
-
-class Producto {
-    constructor(nombre, tipo, precio) {
-        this.nombre = nombre;
-        this.tipo = tipo;
-        this.precio = precio;
-    }
-}
 
 const pantalonUrban = new Producto("Pantalón", "Urban", 2500);
 const pantalonSport = new Producto("Pantalón", "Sport", 2000);
@@ -67,11 +67,7 @@ while (seguirComprando === true) {
             carrito.push(pantalonSport);
         }
         else {
-            tipoPantalon = parseInt(
-                prompt(
-                    "OPCIÓN INVÁLIDA: Ingrese tipo de pantalón válido: 1.Urban - 2.Sport"
-                )
-            );
+            alert("OPCIÓN INVÁLIDA!");
             continue;
         }
     }
@@ -85,7 +81,7 @@ while (seguirComprando === true) {
             carrito.push(remeraSport);
         }
         else {
-            tipoRemera = parseInt(prompt("OPCIÓN INVÁLIDA: Ingrese tipo de remera válido: 1.Urban - 2.Sport"));
+            alert("OPCIÓN INVÁLIDA!");
             continue;
         }
     }
@@ -99,7 +95,7 @@ while (seguirComprando === true) {
             carrito.push(calzadoSport);
         }
         else {
-            tipoCalzado = parseInt(prompt("OPCIÓN INVÁLIDA: Ingrese tipo de calzado válido: 1.Urban - 2.Sport"));
+            alert("OPCIÓN INVÁLIDA!");
             continue;
         }
     }
@@ -113,6 +109,7 @@ while (seguirComprando === true) {
     else {
         alert("PRODUCTO SELECCIONADO NO EXISTE! Ingrese un producto válido para cargar en el carrito:");
         productoSeleccionado = parseInt(prompt("1.Pantalones - 2.Remeras - 3.Calzado - 4.Cancelar compra"));
+        continue;
     }
 
     let decision = parseInt(prompt("1.Seguir comprando - 2.Finalizar compra - 3.Cancelar compra"));
@@ -122,6 +119,7 @@ while (seguirComprando === true) {
     }
     else if (decision === 2) {
         seguirComprando = false;
+        break;
     }
     else if (decision === 3) {
         alert("Que lastima! Te esperamos la proxima!");
@@ -135,10 +133,12 @@ while (seguirComprando === true) {
     }
 }
 
-while (compraCancelada !== true) {
+if (compraCancelada !== true) {
     for (let i = 0; i < carrito.length; i++) {
         totalCompra = totalCompra + carrito[i].precio;
     }
+} else {
+    carrito.splice(0, carrito.length)
 }
 
 if (totalCompra != 0) {
@@ -167,6 +167,6 @@ if (totalCompra != 0) {
     console.log(carrito);
     carrito.filter(filterArray);
     console.log(filtroCarrito);
-    alert("Los productos incorporados en tu carrito son: " + filtroCarrito);
+    alert("Los productos incorporados en tu carrito son: " + filtroCarrito.join(' - '));
 
 }
