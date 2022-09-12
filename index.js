@@ -18,8 +18,8 @@ class Producto {
 
 class Compra {
     constructor(cuotas) {
-        this.totalCompra = 0
-        this.cuotas = cuotas
+        this.totalCompra = 0;
+        this.cuotas = cuotas;
         this.carrito = [];
         this.filtroCarrito = [];
         this.error = "######. No ha ingresado una opción válida, vuelva a empezar ya que sa terminó su posibilidad de compra";
@@ -145,7 +145,7 @@ if (compraCancelada !== true) {
         compra.totalCompra = compra.totalCompra + compra.carrito[i].precio;
     }
 } else {
-    compra.carrito.splice(0, compra.carrito.length)
+    compra.carrito.splice(0, compra.carrito.length);
 }
 
 if (compra.totalCompra != 0) {
