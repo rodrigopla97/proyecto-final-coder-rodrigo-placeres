@@ -2,23 +2,10 @@ let descuentoPrecio = (num) => {
     return num - 1000;
 };
 
-function recargoTarjeta(num, cant) {
-    const mensajeError = "######. No ha ingresado una opción válida, vuelva a empezar ya que sa terminó su posibilidad de compra";
-    if (cant === 1) {
-        return num;
-    } else if (cant === 2) {
-        return num * 1.1;
-    } else if (cant === 3) {
-        return num * 1.25;
-    } else {
-        return mensajeError;
-    }
-}
-
 let descuentoEfectivo = (num) => num - num * 0.1;
 
 function filterArray(value) {
-    return filtroCarrito.push(`${value.nombre} ${value.tipo}`);
+    return compra.filtroCarrito.push(`${value.nombre} ${value.tipo}`);
 }
 
 class Producto {
@@ -29,12 +16,31 @@ class Producto {
     }
 }
 
-let totalCompra = 0;
+class Compra {
+    constructor(cuotas) {
+        this.totalCompra = 0
+        this.cuotas = cuotas
+        this.carrito = [];
+        this.filtroCarrito = [];
+        this.error = "######. No ha ingresado una opción válida, vuelva a empezar ya que sa terminó su posibilidad de compra";
+    }
+    recargoTarjeta() {
+
+        if (this.cuotas === 1) {
+            return this.totalCompra;
+        } else if (this.cuotas === 2) {
+            return this.totalCompra * 1.1;
+        } else if (this.cuotas === 3) {
+            return this.totalCompra * 1.25;
+        } else {
+            return this.error;
+        }
+    }
+}
+
 let tipoPantalon;
 let tipoRemera;
 let tipoCalzado;
-let carrito = [];
-let filtroCarrito = [];
 
 let seguirComprando = true;
 let compraCancelada = false;
@@ -42,7 +48,8 @@ let decision;
 
 let tipoPago;
 let precioFinal = 0;
-let cuotas;
+
+let compra = new Compra()
 
 const pantalonUrban = new Producto("Pantalón", "Urban", 2500);
 const pantalonSport = new Producto("Pantalón", "Sport", 2000);
@@ -61,10 +68,10 @@ while (seguirComprando === true) {
         tipoPantalon = parseInt(prompt("Ingrese tipo de pantalón: 1.Urban - 2.Sport"));
 
         if (tipoPantalon === 1) {
-            carrito.push(pantalonUrban);
+            compra.carrito.push(pantalonUrban);
         }
         else if (tipoPantalon === 2) {
-            carrito.push(pantalonSport);
+            compra.carrito.push(pantalonSport);
         }
         else {
             alert("OPCIÓN INVÁLIDA!");
@@ -75,10 +82,10 @@ while (seguirComprando === true) {
         tipoRemera = parseInt(prompt("Ingrese tipo de remera: 1.Urban - 2.Sport"));
 
         if (tipoRemera === 1) {
-            carrito.push(remeraUrban);
+            compra.carrito.push(remeraUrban);
         }
         else if (tipoRemera === 2) {
-            carrito.push(remeraSport);
+            compra.carrito.push(remeraSport);
         }
         else {
             alert("OPCIÓN INVÁLIDA!");
@@ -89,10 +96,10 @@ while (seguirComprando === true) {
         tipoCalzado = parseInt(prompt("Ingrese tipo de calzado: 1.Urban - 2.Sport"));
 
         if (tipoCalzado === 1) {
-            carrito.push(calzadoUrban);
+            compra.carrito.push(calzadoUrban);
         }
         else if (tipoCalzado === 2) {
-            carrito.push(calzadoSport);
+            compra.carrito.push(calzadoSport);
         }
         else {
             alert("OPCIÓN INVÁLIDA!");
@@ -101,7 +108,7 @@ while (seguirComprando === true) {
     }
     else if (productoSeleccionado === 4) {
         alert("Que lastima! Te esperamos la proxima!");
-        totalCompra = 0;
+        compra.totalCompra = 0;
         seguirComprando = false;
         compraCancelada = true;
         break;
@@ -123,7 +130,7 @@ while (seguirComprando === true) {
     }
     else if (decision === 3) {
         alert("Que lastima! Te esperamos la proxima!");
-        totalCompra = 0;
+        compra.totalCompra = 0;
         compraCancelada = true;
         break;
     }
@@ -134,24 +141,24 @@ while (seguirComprando === true) {
 }
 
 if (compraCancelada !== true) {
-    for (let i = 0; i < carrito.length; i++) {
-        totalCompra = totalCompra + carrito[i].precio;
+    for (let i = 0; i < compra.carrito.length; i++) {
+        compra.totalCompra = compra.totalCompra + compra.carrito[i].precio;
     }
 } else {
-    carrito.splice(0, carrito.length)
+    compra.carrito.splice(0, compra.carrito.length)
 }
 
-if (totalCompra != 0) {
+if (compra.totalCompra != 0) {
 
-    alert("El total sin descuento de su de su carrito es de ARS$" + totalCompra);
+    alert("El total sin descuento de su de su carrito es de ARS$" + compra.totalCompra);
 
-    if (totalCompra > 9000) {
-        precioFinal = descuentoPrecio(totalCompra);
+    if (compra.totalCompra > 9000) {
+        precioFinal = descuentoPrecio(compra.totalCompra);
         alert("El precio por ser compra mayor a ARS$9000 de su carrito es de ARS$" + precioFinal);
     }
     else {
-        precioFinal = totalCompra;
-        alert("El precio final de su carrito es de ARS$" + totalCompra);
+        precioFinal = compra.totalCompra;
+        alert("El precio final de su carrito es de ARS$" + compra.totalCompra);
     }
 
     tipoPago = parseInt(prompt("Ingrese tipo de pago: 1.Efectivo - 2.Cuotas"));
@@ -160,13 +167,13 @@ if (totalCompra != 0) {
         alert("El precio final de su carrito es de ARS$" + descuentoEfectivo(precioFinal));
     }
     else if (tipoPago === 2) {
-        cuotas = parseInt(prompt("Elija cantidad de cuotas: 1.Una cuota - 2.Dos cuotas 3.Tres cuotas"));
-        alert("El precio final de su carrito es de ARS$" + recargoTarjeta(precioFinal, cuotas));
+        compra.cuotas = parseInt(prompt("Elija cantidad de cuotas: 1.Una cuota - 2.Dos cuotas 3.Tres cuotas"));
+        alert("El precio final de su carrito es de ARS$" + compra.recargoTarjeta());
     }
 
-    console.log(carrito);
-    carrito.filter(filterArray);
-    console.log(filtroCarrito);
-    alert("Los productos incorporados en tu carrito son: " + filtroCarrito.join(' - '));
+    console.log(compra.carrito);
+    compra.carrito.filter(filterArray);
+    console.log(compra.filtroCarrito);
+    alert("Los productos incorporados en tu carrito son: " + compra.filtroCarrito.join(' - '));
 
 }
