@@ -5,20 +5,30 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proyecto Final Coder - Rodrigo Placeres</title>
+    <title>CrowShop</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/card.css">
 
 </head>
 
 <body>
 
     <header>
-        <h1>Segunda entrega del Proyecto Final - Rodrigo Placeres</h1>
+
+        <nav>
+            <h1>CrowShop</h1>
+            <a class="cart" id="btnCarrito">
+                <i class="fa fa-shopping-cart"></i>
+                <span id="cart-counter"></span>
+            </a>
+        </nav>
     </header>
 
     <div id="usuario">
-        <h3 id="tituloUsuario">Ingrese su nombre y correo electrónico para recibir nuestras newsletter!</h3>
+        <h3 id="tituloUsuario">Ingrese su nombre y correo electrónico para recibir nuestras Newsletter!</h3>
+
         <form id="formUsuario">
             <input type="text" name="name" id="name" placeholder="Ingrese su nombre...">
             <input type="text" name="lastname" id="lastname" placeholder="Ingrese su apellido...">
@@ -27,26 +37,24 @@
         </form>
     </div>
 
-    <div id="stock" class="divProd">
-        <h3>Productos disponibles</h3>
-
-        <select name="select-productos" id="select-productos"></select>
-    </div>
+    <div id="container-card" class="container-card"></div>
 
     <div id="botones"></div>
 
     <div id="carrito-container">
-        <h3 class="titulo-carrito">Carrito</h3>
+        <h3 class="titulo-carrito"></h3>
         <p id="vacio">Carrito vacío :c</p>
         <ul id="lista"></ul>
     </div>
 
-    <div id="total"></div>
 
     <div id="saludo"></div>
 
     <footer id="footer"></footer>
 
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="creates.js"></script>
+    <script src="usuario.js"></script>
     <script src="index.js"></script>
 </body>
 

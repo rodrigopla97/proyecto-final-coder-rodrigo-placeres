@@ -1,166 +1,160 @@
-function innerVacio() {
-    carritoVacio.innerHTML = "";
-    ulList.innerHTML = "";
-    pTotal.innerText = "";
-    pSaludo.innerText = "";
-}
-class usuario {
-    constructor(id, nombre, tipo, precio) {
-        this.id = id;
-        this.nombre = nombre;
-        this.tipo = tipo;
-        this.precio = precio;
+function agregarAlCarrito(producto) {
+
+    carrito.push({ ...producto, cantidad: 0 });
+
+    const enCarrito = carrito.find(prod => prod.id == producto.id);
+
+    console.log(enCarrito, "EN CARRITO")
+
+    if (!enCarrito) {
+        carrito.push({ ...producto, cantidad: 1 });
     }
-}
-class Producto {
-    constructor(id, nombre, tipo, precio) {
-        this.id = id;
-        this.nombre = nombre;
-        this.tipo = tipo;
-        this.precio = precio;
-    }
-}
-class Compra {
-    constructor(cuotas) {
-        this.totalCompra = 0;
-        this.cuotas = cuotas;
-        this.carrito = [];
-        this.filtroCarrito = [];
+    else {
+        let carritoFiltrado = carrito.filter(prod => prod.id != producto.id);
+        carrito = [...carritoFiltrado, { ...enCarrito, cantidad: enCarrito.cantidad + 1 }]
+        contador.innerHTML = carrito.reduce((acc, prod) => acc + prod.cantidad, 0);
     }
 }
 
-const btnAgregar = document.createElement("button");
-const btnFinalizar = document.createElement("button");
-const btnCancelar = document.createElement("button");
-const btnVaciar = document.createElement("button");
-const pFooter = document.createElement("p");
-const tituloUsuario = document.getElementById("tituloUsuario");
-const formUsuario = document.getElementById("formUsuario");
-const selectTag = document.getElementById("select-productos");
-const carritoVacio = document.getElementById("vacio");
-const carritoContainer = document.getElementById("carrito-container");
-const ulList = document.getElementById("lista");
-const saludo = document.getElementById("saludo");
-const footer = document.getElementById("footer");
-const disponible = document.getElementById("stock");
-const botones = document.getElementById("botones");
-const total = document.getElementById("total");
-const pTotal = document.createElement("p");
-const pSaludo = document.createElement("p");
+function verCarrito() {
+    carrito.forEach((producto => {
+        carritoVacio.innerText = "";
+        const li = document.createElement("li");
+        li.innerText = `${producto.nombre} ${producto.tipo} x${producto.cantidad}`
+        ulList.append(li)
+        console.log(ulList)
+        carritoContainer.append(li);
+
+
+
+        console.log(carritoContainer)
+
+        Swal.fire({
+            title: "(┬┬﹏┬┬)",
+            html: carritoContainer,
+            buttonsStyling: false
+        });
+    }));
+
+
+}
+
+class Producto {
+    constructor(id, nombre, tipo, precio, img) {
+        this.id = id;
+        this.nombre = nombre;
+        this.tipo = tipo;
+        this.precio = precio;
+        this.img = img;
+    }
+    mostrarProductos() {
+        const card = `
+            <div class="card">
+              <p class="titulo-card">${this.nombre} ${this.tipo}</p>
+              <div>
+                <img class="img-producto" src="${this.img}" alt="${this.nombre} ${this.tipo} Crow">
+              </div>
+              <div>
+                <p class="precio-card">$${this.precio}</p>
+              </div>
+              <div class="btn-container">
+                <button id="${this.id}" class="btnAgregar">Agregar al carrito</button>
+              </div>
+            </div>
+      `
+
+        const container = document.getElementById('container-card');
+        container.innerHTML += card
+    }
+    agregarEvento() {
+        const btnAgregar = document.getElementById(this.id)
+        const productoEncontrado = productos.find(p => p.id == this.id)
+        btnAgregar.addEventListener('click', () => agregarAlCarrito(productoEncontrado))
+        btnCarrito.addEventListener('click', () => verCarrito(productoEncontrado))
+    }
+}
 
 let productos = [];
+let carrito = [];
+let carritoLista = [];
 let totalCompra = 0;
-const date = new Date();
-const anio = date.getFullYear();
-let compra = new Compra();
-let nombreUsuario = "";
-let apellidoUsuario = "";
-let correo = "";
 
-botones.append(btnAgregar);
-botones.append(btnFinalizar);
-botones.append(btnCancelar);
-botones.append(btnVaciar);
-footer.append(pFooter);
+const contador = document.getElementById("cart-counter");
+contador.innerHTML = carrito.reduce((acc, prod) => acc + prod.cantidad, 0);
 
-const pantalonUrban = new Producto(1, "Pantalón", "Urban", 2500);
-const pantalonSport = new Producto(2, "Pantalón", "Sport", 2000);
-const remeraUrban = new Producto(3, "Remera", "Urban", 1200);
-const remeraSport = new Producto(4, "Remera", "Sport", 1500);
-const calzadoUrban = new Producto(5, "Calzado", "Urban", 6000);
-const calzadoSport = new Producto(6, "Calzado", "Sport", 8000);
+const pantalonUrban = new Producto(1, "Pantalón", "Urban", 2500, 'img/pantalon-urban.jpg');
+const pantalonSport = new Producto(2, "Pantalón", "Sport", 2000, 'img/pantalon-sport.jpg');
+const remeraUrban = new Producto(3, "Remera", "Urban", 1200, 'img/remera-urban.jpg');
+const remeraSport = new Producto(4, "Remera", "Sport", 1500, 'img/remera-sport.jpg');
+const calzadoUrban = new Producto(5, "Calzado", "Urban", 6000, 'img/calzado-urban.jpg');
+const calzadoSport = new Producto(6, "Calzado", "Sport", 8000, 'img/calzado-sport.jpg');
 
 productos.push(pantalonUrban, pantalonSport, remeraUrban, remeraSport, calzadoUrban, calzadoSport);
 
-productos.forEach((producto) => {
-    const option = document.createElement("option");
-    option.innerText = `${producto.nombre} ${producto.tipo}: $${producto.precio}`;
-    option.setAttribute("id", `${producto.id}`);
-    option.setAttribute("class", "option");
-    selectTag.append(option);
-});
+productos.forEach(e => e.mostrarProductos());
+productos.forEach(e => e.agregarEvento());
 
-btnAgregar.innerText = "Agregar Producto";
-btnFinalizar.innerText = "Finalizar Compra";
-btnCancelar.innerText = "Cancelar Compra";
-btnVaciar.innerText = "Vaciar Carrito";
-carritoVacio.innerText = `Carrito vacío :c`;
-pFooter.innerText = `Rodrigo Placeres ${anio}`;
-
-formUsuario.onsubmit = (e) => {
-    e.preventDefault();
-    const infoUserArray = [];
-    for (const element of e.target.children) {
-        const usuarioObj = {};
-        usuarioObj["tipo"] = element.name;
-        usuarioObj["valor"] = element.value;
-        infoUserArray.push(usuarioObj);
-    }
-    localStorage.setItem("info", JSON.stringify(infoUserArray));
-
-    window.location.reload();
-};
-
-if (localStorage.length > 0) {
-    const info = JSON.parse(localStorage.getItem("info"));
-
-    info.forEach((dato) => {
-        if (dato.tipo === "name") {
-            nombre = dato.valor;
-        }
-        if (dato.tipo === "lastname") {
-            apellido = dato.valor;
-        }
-        if (dato.tipo === "email") {
-            correo = dato.valor;
-        }
-    });
-
-    if (nombre !== "" && apellido !== "" && correo !== "") {
-        tituloUsuario.innerText = `Hola ${nombre} ${apellido}! Bienvenido a CrowShop`;
-        formUsuario.innerText = "";
-    } else {
-        tituloUsuario.innerText = `No ingresó todos los datos`;
-    }
-}
-
-btnAgregar.onclick = () => {
-    const productoIngresado = productos[selectTag.selectedIndex];
-    const li = document.createElement("li");
-
-    compra.carrito.push(productoIngresado);
-    compra.carrito.forEach((producto) => (li.innerText = `${producto.nombre} ${producto.tipo}`));
-    ulList.append(li);
-    carritoContainer.append(ulList);
-    carritoVacio.innerHTML = "";
-    pTotal.innerText = "";
-    pSaludo.innerText = "";
-};
 
 btnFinalizar.onclick = () => {
-    totalCompra = 0;
-    compra.carrito.forEach((producto) => (totalCompra = totalCompra + producto.precio));
-    innerVacio();
 
-    if (totalCompra === 0) {
-        carritoVacio.innerText = `Carrito vacío :c`;
+    totalCompra = 0
+
+    carrito.forEach((producto) => (totalCompra += producto.precio * producto.cantidad));
+
+    if (totalCompra !== 0) {
+        Swal.fire({
+            title: "(⌐■_■)",
+            text: `Haz finalizado tu compra con éxito! El precio de su carrito es de $${totalCompra}`,
+            icon: "success",
+            buttonsStyling: false
+        });
+
     } else {
-        pTotal.innerText = `El total de la compra es de $${totalCompra}`;
-        total.append(pTotal);
-        compra.carrito = [];
+        Swal.fire({
+            title: "¯|_(ツ)_/¯",
+            text: `No agregaste ningun producto a tu carrito`,
+            icon: "success",
+            buttonsStyling: false
+        });
     }
+
+    vacio();
+
 };
 
 btnCancelar.onclick = () => {
-    innerVacio();
-    carritoVacio.innerText = `Carrito vacío :c`;
-    pSaludo.innerText = `Que lastima! Te esperamos la proxima!`;
-    saludo.append(pSaludo);
-    compra.carrito = [];
+    vacio();
+    Swal.fire({
+        title: "(┬┬﹏┬┬)",
+        text: "Que lastima! Te esperamos la proxima!",
+        buttonsStyling: false
+    })
+    carrito = []
 };
 
 btnVaciar.onclick = () => {
-    innerVacio();
-    carritoVacio.innerText = `Carrito vacío :c`;
-    compra.carrito = [];
+    vacio();
+    Swal.fire({
+        title: "( ﾉ ﾟｰﾟ)ﾉ",
+        text: "Carrito vacio :_",
+        buttonsStyling: false
+    });
+
+};
+
+btnProximos.onclick = () => {
+    vacio();
+    carritoVacio.innerText = `Proximamente contaremos con los siguientes productos`;
+    fetch('https://api.escuelajs.co/api/v1/categories/4/products')
+        .then(res => res.json())
+        .then(json => {
+            const proximos = json
+            console.log(proximos)
+            proximos.forEach(prod => {
+                const list = document.createElement('li')
+                list.innerHTML = `<h3>${prod.category.name} - ${prod.title} </h3>
+        <img src=${prod.images}>`
+                ulList.append(list)
+            })
+        })
 };
