@@ -1,16 +1,12 @@
-
 function vacio() {
     carrito = [];
     carritoFiltrado = [];
     ulList.innerHTML = "";
     pTotal.innerText = "";
     pSaludo.innerText = "";
-    finalizado = true;
     carritoVacio.innerText = `Carrito vacío :c`;
-    contador.innerHTML = ""
-    ulList.innerHTML = ""
+    contador.innerHTML = 0;
 }
-
 
 const anio = new Date().getFullYear();
 const btnFinalizar = document.createElement("button");

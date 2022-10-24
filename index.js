@@ -1,10 +1,7 @@
 function agregarAlCarrito(producto) {
-
     carrito.push({ ...producto, cantidad: 0 });
 
     const enCarrito = carrito.find(prod => prod.id == producto.id);
-
-    console.log(enCarrito, "EN CARRITO")
 
     if (!enCarrito) {
         carrito.push({ ...producto, cantidad: 1 });
@@ -25,18 +22,12 @@ function verCarrito() {
         console.log(ulList)
         carritoContainer.append(li);
 
-
-
-        console.log(carritoContainer)
-
         Swal.fire({
             title: "(┬┬﹏┬┬)",
             html: carritoContainer,
             buttonsStyling: false
         });
     }));
-
-
 }
 
 class Producto {
@@ -62,7 +53,6 @@ class Producto {
               </div>
             </div>
       `
-
         const container = document.getElementById('container-card');
         container.innerHTML += card
     }
@@ -76,7 +66,6 @@ class Producto {
 
 let productos = [];
 let carrito = [];
-let carritoLista = [];
 let totalCompra = 0;
 
 const contador = document.getElementById("cart-counter");
@@ -93,7 +82,6 @@ productos.push(pantalonUrban, pantalonSport, remeraUrban, remeraSport, calzadoUr
 
 productos.forEach(e => e.mostrarProductos());
 productos.forEach(e => e.agregarEvento());
-
 
 btnFinalizar.onclick = () => {
 
@@ -117,9 +105,7 @@ btnFinalizar.onclick = () => {
             buttonsStyling: false
         });
     }
-
     vacio();
-
 };
 
 btnCancelar.onclick = () => {
@@ -128,8 +114,7 @@ btnCancelar.onclick = () => {
         title: "(┬┬﹏┬┬)",
         text: "Que lastima! Te esperamos la proxima!",
         buttonsStyling: false
-    })
-    carrito = []
+    });
 };
 
 btnVaciar.onclick = () => {
@@ -148,13 +133,12 @@ btnProximos.onclick = () => {
     fetch('https://api.escuelajs.co/api/v1/categories/4/products')
         .then(res => res.json())
         .then(json => {
-            const proximos = json
-            console.log(proximos)
+            const proximos = json;
             proximos.forEach(prod => {
-                const list = document.createElement('li')
+                const list = document.createElement('li');
                 list.innerHTML = `<h3>${prod.category.name} - ${prod.title} </h3>
         <img src=${prod.images}>`
-                ulList.append(list)
-            })
-        })
+                ulList.append(list);
+            });
+        });
 };
