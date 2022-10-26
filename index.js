@@ -11,6 +11,7 @@ function agregarAlCarrito(producto) {
         carrito = [...carritoFiltrado, { ...enCarrito, cantidad: enCarrito.cantidad + 1 }]
         contador.innerHTML = carrito.reduce((acc, prod) => acc + prod.cantidad, 0);
     }
+    carritoVacio.innerText = "";
 }
 
 function verCarrito() {
