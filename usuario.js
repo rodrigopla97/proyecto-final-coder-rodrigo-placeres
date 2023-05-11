@@ -30,16 +30,20 @@ formUsuario.onsubmit = (e) => {
 if (localStorage.length > 0) {
     const info = JSON.parse(localStorage.getItem("info"));
 
-    info.forEach((dato) => {
-        dato.tipo === "name" ? nombre = dato.valor : '';
-        dato.tipo === "lastname" ? apellido = dato.valor : '';
-        dato.tipo === "email" ? correo = dato.valor : '';
-    });
 
-    if (nombre !== "" && apellido !== "" && correo !== "") {
-        tituloUsuario.innerText = `Hola ${nombre} ${apellido}! Bienvenido a CrowShop`;
-        formUsuario.innerText = "";
-    } else {
-        tituloUsuario.innerText = `No ingresó todos los datos`;
+    console.log("QUE HAY EN INFO", info)
+    if (info != null) {
+        info.forEach((dato) => {
+            dato.tipo === "name" ? nombre = dato.valor : '';
+            dato.tipo === "lastname" ? apellido = dato.valor : '';
+            dato.tipo === "email" ? correo = dato.valor : '';
+        });
+
+        if (nombre !== "" && apellido !== "" && correo !== "") {
+            tituloUsuario.innerText = `Hola ${nombre} ${apellido}! Bienvenido a CrowShop`;
+            formUsuario.innerText = "";
+        } else {
+            tituloUsuario.innerText = `No ingresó todos los datos`;
+        }
     }
 }

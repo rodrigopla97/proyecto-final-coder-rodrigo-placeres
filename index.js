@@ -1,36 +1,31 @@
 function agregarAlCarrito(producto) {
-    carrito.push({ ...producto, cantidad: 0 });
+    const enCarrito = carrito.find(prod => prod.id === producto.id);
 
-    const enCarrito = carrito.find(prod => prod.id == producto.id);
-
-    if (!enCarrito) {
+    if (enCarrito) {
+        enCarrito.cantidad += 1;
+    } else {
         carrito.push({ ...producto, cantidad: 1 });
     }
-    else {
-        let carritoFiltrado = carrito.filter(prod => prod.id != producto.id);
-        carrito = [...carritoFiltrado, { ...enCarrito, cantidad: enCarrito.cantidad + 1 }]
-        contador.innerHTML = carrito.reduce((acc, prod) => acc + prod.cantidad, 0);
-    }
+
+    contador.innerHTML = carrito.reduce((acc, prod) => acc + prod.cantidad, 0);
     carritoVacio.innerText = "";
+
+    ulList.innerHTML = "";
+
+    carrito.forEach((producto) => {
+        let li = document.createElement("li");
+        li.innerText = `${producto.nombre} ${producto.tipo} x${producto.cantidad}`;
+        ulList.append(li);
+    });
 }
 
 function verCarrito() {
-    carrito.forEach((producto => {
-        carritoVacio.innerText = "";
-        const li = document.createElement("li");
-        li.innerText = `${producto.nombre} ${producto.tipo} x${producto.cantidad}`
-        ulList.append(li)
-        console.log(ulList)
-        carritoContainer.append(li);
-
-        Swal.fire({
-            title: "(┬┬﹏┬┬)",
-            html: carritoContainer,
-            buttonsStyling: false
-        });
-    }));
+    Swal.fire({
+        title: "ヾ(＠⌒ー⌒＠)ノ",
+        html: carritoContainer,
+        buttonsStyling: false
+    });
 }
-
 class Producto {
     constructor(id, nombre, tipo, precio, img) {
         this.id = id;
